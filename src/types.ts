@@ -1,7 +1,10 @@
 export type AspectRatio = '1:1' | '4:5' | '3:4' | '9:16' | '16:9';
 
-// Loại sản phẩm phôi (ugly sweater) do người dùng chọn -> AI tham chiếu đúng concept.
-export type ProductType = 'sweater' | 'sweatshirt' | 'hoodie';
+// Ngách thiết kế: 'racing' (áo đua) hoặc 'anime' (ugly sweater). Chọn ngách -> dùng đúng prompt.
+export type Niche = 'racing' | 'anime';
+
+// Loại sản phẩm phôi do người dùng chọn (theo ngách) -> AI tham chiếu đúng concept.
+export type ProductType = 'polo' | 'tshirt' | 'hoodie-jogger' | 'sweater' | 'sweatshirt' | 'hoodie';
 
 export interface MediaItem {
   mediaId: string;
@@ -11,7 +14,9 @@ export interface MediaItem {
 
 /** 2 ô upload bên trái + tuỳ chọn. */
 export interface InputState {
-  // Ô 1: ảnh anime/nhân vật (chủ thể thiết kế: nhân vật, series anime, theme...).
+  // Ngách thiết kế đang chọn -> quyết định prompt + loại sản phẩm + nhãn ô nhập.
+  niche: Niche;
+  // Ô 1: ảnh chủ thể (anime/nhân vật, hoặc xe... tuỳ ngách).
   sourceImage: MediaItem | null;
   // Ô 2: ảnh phôi trắng/trơn — canvas để AI in design lên.
   blankImage: MediaItem | null;
