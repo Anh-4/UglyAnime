@@ -8,48 +8,39 @@ const NUM_OPTIONS = 2;
 
 // Loại sản phẩm phôi -> nhãn dropdown + mô tả đưa vào prompt cho AI.
 const PRODUCT_TYPES: { value: ProductType; label: string }[] = [
-  { value: 'polo', label: 'Polo' },
-  { value: 'tshirt', label: 'T-shirt' },
-  { value: 'hoodie-jogger', label: 'Combo Hoodie + Jogger' },
+  { value: 'sweater', label: 'Ugly sweater (áo len dệt)' },
+  { value: 'sweatshirt', label: 'Sweatshirt' },
+  { value: 'hoodie', label: 'Hoodie' },
 ];
 const PRODUCT_TYPE_PROMPT: Record<ProductType, string> = {
-  polo: 'a POLO SHIRT',
-  tshirt: 'a T-SHIRT',
-  'hoodie-jogger': 'a HOODIE + JOGGER set (a matching hoodie and jogger pants)',
+  sweater: 'an UGLY-SWEATER-STYLE crewneck KNIT SWEATER (a festive knitted jumper) — lean fully into the knitted ugly-sweater texture',
+  sweatshirt: 'a crewneck SWEATSHIRT — print a knit-look ugly-sweater graphic onto it',
+  hoodie: 'a HOODIE — print a knit-look ugly-sweater graphic onto it',
 };
 
-/** Ghép prompt chuyển design lên phôi từ 2 ảnh tham chiếu (theo đúng thứ tự truyền vào). */
+/** Ghép prompt in design ugly-sweater anime lên phôi từ 2 ảnh tham chiếu (theo đúng thứ tự truyền vào). */
 function buildPrompt(notes: string, variant: number, productType: ProductType): string {
-  const base = `You are a professional print-on-demand apparel mockup generator specialized in racing-style apparel.
+  const base = `You are a professional print-on-demand "UGLY SWEATER" apparel mockup generator specialized in ANIME ugly-sweater designs — the festive, kitschy novelty-knit "ugly Christmas sweater" look fused with anime.
 
 You are given two reference images, in this EXACT order:
-- IMAGE 1 — THEME & COLOR SOURCE: the motorsport theme, identity and color palette the new design must be based on (typically a vehicle/car or racing machine, but it may also be a character or team). Use it ONLY as inspiration for the theme, mood and — above all — the COLORS; it is NOT something to draw on the apparel. IMPORTANT — COLOR: take the DOMINANT color palette of the new design from this subject's real colors. If it is a vehicle/car, the car's main body color MUST be the leading, dominant color of the whole design. You may add a few tasteful accent/secondary colors, but that dominant color must clearly lead. NEVER paste, draw, render or depict the car/vehicle (or its photo) on the product — translate it into colors and motorsport theme only. HOWEVER, the real sponsor logos, brand marks and team names that appear ON the car SHOULD be reproduced and placed on the apparel, laid out like authentic race-team merchandise.
-- IMAGE 2 — BLANK PRODUCT: a plain blank apparel product (e.g. a hoodie, jogger/pants, polo shirt or t-shirt). This is the canvas you print the design onto.
+- IMAGE 1 — ANIME THEME & SUBJECT SOURCE: the anime character, series or theme the new design must be built around. UNLIKE a plain color swatch, this IS the hero of the artwork — faithfully feature this character and its iconic motifs, items and symbols, redrawn in the ugly-sweater knit art style (see DESIGN STYLE), and keep the character clearly recognizable. Take the design's color accents from this subject's real colors (hair, outfit, signature colors).
+- IMAGE 2 — BLANK PRODUCT: a plain blank garment (e.g. a sweater, sweatshirt or hoodie). This is the canvas you print the design onto.
 
-PRESERVE THE PRODUCT'S SHAPE & SCENE — CRITICAL: Keep the EXACT SAME garment type, shape, silhouette, cut, collar, sleeves, fabric and material, folds and wrinkles, AND the EXACT SAME background/scene, lighting, shadows, people, pose and camera angle as IMAGE 2. Do NOT swap the garment for a different type (e.g. do not turn a polo into a t-shirt), do NOT reshape, resize or replace the product, and do NOT change the background or the people. BUT the product's plain white/neutral surface is ONLY a blank CANVAS — you SHOULD cover it with the printed design INCLUDING LARGE AREAS OF COLOR, so the apparel takes on the design's colors like a real printed/dyed team kit. Do NOT leave it as a plain white garment with just a small logo. The print must wrap the fabric's folds, curvature and lighting like a real garment.
+PRESERVE THE PRODUCT'S SHAPE & SCENE — CRITICAL: Keep the EXACT SAME garment type, shape, silhouette, cut, collar, cuffs, sleeves, fabric and material, folds and wrinkles, AND the EXACT SAME background/scene, lighting, shadows, people, pose and camera angle as IMAGE 2. Do NOT swap the garment for a different type, do NOT reshape, resize or replace the product, and do NOT change the background or the people. BUT the product's plain surface is ONLY a blank CANVAS — you SHOULD cover it with the printed ugly-sweater design INCLUDING LARGE AREAS OF COLOR and all-over knit patterning, so it reads as a real festive anime ugly sweater, NOT a plain garment with one small logo. The print must wrap the fabric's folds, curvature and lighting like a real garment.
 
-DESIGN STYLE — DECIDE IT YOURSELF (no style-reference image is provided). The blank product in IMAGE 2 is ${PRODUCT_TYPE_PROMPT[productType]} — design specifically for this product type, applying the matching GARMENT-SPECIFIC GUIDANCE below.
+DESIGN STYLE — ANIME UGLY SWEATER. The blank product in IMAGE 2 is ${PRODUCT_TYPE_PROMPT[productType]}. Build the design in the classic "ugly Christmas sweater" aesthetic: chunky knit / cross-stitch / fair-isle texture, horizontal patterned bands and borders, snowflakes, geometric and pixelated knit motifs and festive icons — intentionally fun, busy and kitschy — and fuse the anime subject from IMAGE 1 into it (the character rendered as if knitted into the sweater, framed by themed knit motifs).
 
-The design is built PRIMARILY around IMAGE 1 — its DOMINANT colors (see COLOR rule) and its motorsport theme/identity are the CORE of the artwork. For STYLING ONLY, take CONCEPT inspiration from how real racing apparel looks: the apparel and outfits of current, popular, best-selling racing drivers, plus
-- the design concepts of current, active racing series and their teams (e.g. F1, MotoGP, WEC, 24h Le Mans) — jerseys, team wear and race kits,
-- popular, trending ("hot"), best-selling racing-apparel and driver merch designs.
-Use all the above as STYLING concept for layout and composition. IMPORTANT: you SHOULD include the actual sponsor logos, brand marks and team identity that are visible on the car in IMAGE 1 — reproduce them faithfully and arrange them across the apparel like a real team kit — while you compose the overall layout yourself, driven by IMAGE 1's colors and theme.
+RESEARCH & TREND-MATCH (VERY IMPORTANT): design as if you had just researched the search keyword "ugly sweater anime" and studied the TOP-RANKING results across Google's "All", "Images", "Short videos" and "Shopping" tabs, plus the best-selling listings on POD marketplaces (Etsy, Amazon, Redbubble, TeePublic). Take CONCEPT, layout, motif and composition inspiration from those hottest, top-of-search, best-selling ugly-sweater anime designs, and synthesize them into a fresh, polished, market-ready design — do NOT copy any single existing one.
 
-GARMENT-SPECIFIC GUIDANCE:
-- HOODIE + JOGGER (combo set): take CONCEPT inspiration from the actual RACE SUITS / driver overalls worn by real racing drivers — their paneling, color-blocking, stripe work, sponsor-patch placement and team-kit layout — and translate that into a matching hoodie + jogger set. ALSO take concept from best-selling, hottest, top-trending racing hoodie designs, from the latest racing seasons/championships and their newest champion drivers, and from best-selling, hot, top-trending F1 & MotoGP racing suits — the kind that top Google searches and marketplace trends. Bolder, larger graphics with paneled and all-over prints work well here.
-- POLO SHIRT / T-SHIRT: take CONCEPT inspiration from the polos and t-shirts actually worn by racing drivers, by pit crew / paddock & logistics staff at the track, and from official team & sponsor shirts (e.g. McLaren, Aston Martin, Red Bull, WEC, 24h Le Mans). ALSO take concept from the best-selling, hottest, top-trending F1 and MotoGP racing polo & t-shirt designs — the kind that top Google searches and marketplace trends for racing apparel. Use the tasteful, restrained placement typical of these shirts — a left-chest crest/logo, small sleeve accents, sponsor-style wordmarks and clean collar-appropriate styling — rather than one huge full-front print. Keep it clean and wearable like real team/sponsor apparel.
-
-Synthesize these influences into a polished, market-ready racing-apparel design that looks like authentic team merch. REMEMBER: the design must stay centered on the uploaded vehicle (IMAGE 1) — using its real sponsor logos / team branding AND, above all, the CAR'S COLOR as the clearly DOMINANT color of the entire design.
-
-TASK: Create a brand-new graphic design themed on the subject of IMAGE 1, using that subject's colors (the car's body color) as the DOMINANT palette, in a racing-apparel style and layout that YOU compose and that suits the garment type in IMAGE 2, and print it realistically onto that blank product — as if it were truly screen-printed on it, following the fabric folds, curvature and lighting so the result looks like a real product photo.
+TASK: Create a brand-new ugly-sweater-style anime graphic themed on the subject of IMAGE 1, in the knit/festive style above, and print it realistically onto the blank product in IMAGE 2 — as if truly knitted/printed on it, following the fabric folds, curvature and lighting so the result looks like a real product photo.
 
 STRICT RULES:
-- COLOR PRIORITY (VERY IMPORTANT): the FINISHED apparel must be clearly DOMINATED by the car's color from IMAGE 1. Apply that color as LARGE color fields / color-blocking across the garment — like a real race-team polo, shirt or kit in its team colors — NOT as a few small logos left on a plain white shirt. The blank white base must be mostly covered by the design; the car's color clearly leads, with only a few tasteful accent colors. If the car is dark navy blue, the apparel must read as dark navy blue; if red, as red; etc.
-- NO VEHICLE IMAGERY: ABSOLUTELY do NOT put any image, photo, illustration or rendering of the car/vehicle onto the apparel. The car is a theme, color and BRANDING source. The printed design must look like authentic racing-team apparel — livery-style stripes, the REAL sponsor logos and team/brand wordmarks taken from the car, crests and racing typography — like that car's genuine team kit/merch.
-- PRINT ONLY: only add the design; never change the garment, its shape, or the background of IMAGE 2 (see "PRESERVE THE BLANK PRODUCT" above).
-- The final image shows ONLY the product from IMAGE 2. Do NOT show IMAGE 1 anywhere in the output.
+- FEATURE THE ANIME SUBJECT: the character and motifs from IMAGE 1 MUST be clearly present and recognizable, rendered in the ugly-sweater knit style.
+- ALL-OVER UGLY-SWEATER LOOK: cover the garment with the festive knit design plus patterned bands/borders; choose a tasteful festive base color (e.g. red, green, navy, black or cream) that suits IMAGE 1's palette. Do NOT leave a plain garment with just a small print.
+- PRINT ONLY: only add the design; never change the garment, its shape, or the background of IMAGE 2 (see "PRESERVE THE PRODUCT'S SHAPE & SCENE" above).
+- The final image shows ONLY the product from IMAGE 2. Do NOT show IMAGE 1's original photo anywhere in the output.
 - Output ONE single high-resolution, photorealistic product mockup image.`;
-  const variantHint = `\n\nThis is creative VARIATION #${variant + 1} of ${NUM_OPTIONS}. Make it visibly DIFFERENT from the other variations — vary the artwork's composition, framing, accent colors and graphic arrangement — but KEEP the subject's (car's) color as the dominant palette, and strictly obey every rule above.`;
+  const variantHint = `\n\nThis is creative VARIATION #${variant + 1} of ${NUM_OPTIONS}. Make it visibly DIFFERENT from the other variations — vary the layout, the knit motifs and borders, the festive base color and the overall composition — but keep the same anime subject from IMAGE 1 clearly recognizable and strictly obey every rule above.`;
   const extra = notes.trim()
     ? `\n\nADDITIONAL INSTRUCTIONS FROM USER (must also follow): "${notes.trim()}"`
     : '';
@@ -160,7 +151,7 @@ export default function App() {
   const [inputs, setInputs] = useState<InputState>({
     sourceImage: null,
     blankImage: null,
-    productType: 'polo',
+    productType: 'sweater',
     notes: '',
     aspectRatio: '1:1',
   });
@@ -346,8 +337,8 @@ export default function App() {
         <div className="flex-1 overflow-y-auto dark-scrollbar p-4 flex flex-col gap-4">
           <UploadBox
             index={1}
-            title="Ảnh tư liệu"
-            desc="Chủ thể/chất liệu: xe, nhân vật, theme…"
+            title="Ảnh anime/nhân vật"
+            desc="Nhân vật/series anime để in lên áo"
             image={inputs.sourceImage}
             onPick={() => pick('sourceImage')}
             onRemove={() => clearSlot('sourceImage')}
@@ -356,7 +347,7 @@ export default function App() {
           <UploadBox
             index={2}
             title="Ảnh phôi trắng"
-            desc="Áo/quần trơn để AI in design lên"
+            desc="Áo sweater/phôi trơn để AI in lên"
             image={inputs.blankImage}
             onPick={() => pick('blankImage')}
             onRemove={() => clearSlot('blankImage')}
@@ -368,7 +359,7 @@ export default function App() {
             <textarea
               value={inputs.notes}
               onChange={(e) => setInputs((prev) => ({ ...prev, notes: e.target.value }))}
-              placeholder="VD: phủ màu xe làm nền áo, logo ngực trái, thêm tên đội…"
+              placeholder="VD: nền áo đỏ Giáng Sinh, thêm bông tuyết, tên nhân vật…"
               style={{ height: '80px' }}
               className="border border-[#595959] hover:border-[#7a7a7a] focus:border-[#969696] rounded-xl w-full px-3 py-2.5 resize-none bg-transparent text-[11px] font-medium text-white placeholder-[rgba(218,220,224,0.3)] tracking-[0.1px] focus:outline-none transition-colors dark-scrollbar"
             />

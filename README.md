@@ -1,8 +1,10 @@
 # Ugly Anime
 
-> Nhân bản từ **Design Transfer 2** — cùng codebase. Phần prompt AI hiện vẫn là style áo đua (racing); đổi sang ngách anime khi cần.
+> Nhân bản từ **Design Transfer 2** (cùng codebase). Ngách: **Ugly Sweater theme anime (POD)** — AI tham khảo concept các mẫu top-search "ugly sweater anime" (Google All/Images/Short videos/Shopping + Etsy/Amazon/Redbubble) rồi in lên phôi.
 
-Đưa **design từ ảnh mẫu lên phôi áo/quần trắng** bằng AI, cho Kozmoz Studio (ECZ / Kozmoz / LO).
+Đưa **design anime lên phôi áo (sweater/sweatshirt/hoodie)** bằng AI, cho Kozmoz Studio (ECZ / Kozmoz / LO).
+
+Luồng: **Ảnh 1** = nhân vật/series anime (chủ thể design) · **Ảnh 2** = phôi áo trơn (canvas) → AI ra 2 mẫu mockup theo style ugly-sweater dệt kim.
 
 Cùng stack với `banner-ai` / `shoe-sale`: Vite + React + TS + Tailwind + Electron, gọi AI image-gen qua **OpenRouter**, **Google Gemini** (Nano Banana) hoặc **OpenAI** (GPT Image, gọi thẳng).
 
